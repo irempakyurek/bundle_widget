@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">bundle_widget</string>
+    <string name="appwidget_text">price</string>
+    <string name="refresh_button">Refresh</string>
+</resources>
