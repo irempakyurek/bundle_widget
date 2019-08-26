@@ -10,5 +10,8 @@
     android:previewImage="@drawable/preview"
     android:resizeMode="horizontal"
     android:widgetCategory="home_screen"
+
+    android:configure="com.example.team.bundle_widget.AppWidgetConfigure"
+
     >
 </appwidget-provider>

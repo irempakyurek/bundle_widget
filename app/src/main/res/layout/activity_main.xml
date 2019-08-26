@@ -9,7 +9,7 @@
     android:background="#181d25"
     android:padding="24dp"
 
-    tools:context="com.example.team.bundle_widget.MainActivity">
+    tools:context="com.example.team.bundle_widget.AppWidgetConfigure">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

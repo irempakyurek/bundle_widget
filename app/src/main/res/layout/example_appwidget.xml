@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:background="#181d25"
     android:padding="24dp"
-    tools:context="com.example.team.bundle_widget.MainActivity">
+    tools:context="com.example.team.bundle_widget.AppWidgetConfigure">
 
 
     <RelativeLayout

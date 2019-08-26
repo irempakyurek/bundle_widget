@@ -29,7 +29,7 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
     String base_symbol_code = "TRY";
     String symbol_code = "USD";
 
-    String countryName = "";
+    String countryName = "Turkey";
     String cityName = "Istanbul";
     String provinceName = "Istanbul";
     AppWidgetManager appWidgetManager;
