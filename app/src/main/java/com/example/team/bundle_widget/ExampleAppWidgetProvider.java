@@ -3,39 +3,21 @@ package com.example.team.bundle_widget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.StrictMode;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RemoteViews;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.io.Console;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.content.Context.CONNECTIVITY_SERVICE;
 
 /**
  * Created by ASUS on 2.08.2019.
@@ -47,7 +29,7 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
     String base_symbol_code = "TRY";
     String symbol_code = "USD";
 
-    String countryName = "Turkey";
+    String countryName = "";
     String cityName = "Istanbul";
     String provinceName = "Istanbul";
     AppWidgetManager appWidgetManager;
