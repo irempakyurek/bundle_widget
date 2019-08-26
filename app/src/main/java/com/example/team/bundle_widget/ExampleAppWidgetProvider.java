@@ -53,6 +53,7 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
     AppWidgetManager appWidgetManager;
     int[] appWidgetIds;
 
+    //MARK: - Life Cycle Methods
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
@@ -61,6 +62,23 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
         }*/
     }
 
+    @Override
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        for (int appWidgetId : appWidgetIds) {
+            this.appWidgetIds = appWidgetIds;
+            this.appWidgetManager = appWidgetManager;
+
+            Intent intent = new Intent(context, ExampleAppWidgetProvider.class);
+            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            updateWidget(context, pendingIntent, appWidgetId);
+        }
+    }
+
+    //MARK - State Check and init methods
     private boolean isNetworkConnected(Context context){
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo.State mobile = (NetworkInfo.State) manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();
@@ -68,6 +86,15 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
         return mobile ==  NetworkInfo.State.CONNECTED || wifi == NetworkInfo.State.CONNECTED;
     }
 
+    private RemoteViews remoteViews(Context context, PendingIntent pendingIntent){
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.example_appwidget);
+        views.setOnClickPendingIntent(R.id.refresh_button, pendingIntent);
+        views.setViewVisibility(R.id.no_internet_connection, View.GONE);
+        views.setViewVisibility(R.id.widget_layout, View.VISIBLE);
+        return  views;
+    }
+
+    //MARK: - Setup Hide Update Methods
     private void setupFinance(RemoteViews views, int appWidgetId){
         views.setViewVisibility(R.id.finance_active_layout, View.VISIBLE);
         views.setViewVisibility(R.id.finance_no_active_layout, View.GONE);
@@ -214,14 +241,6 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
-    private RemoteViews remoteViews(Context context, PendingIntent pendingIntent){
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.example_appwidget);
-        views.setOnClickPendingIntent(R.id.refresh_button, pendingIntent);
-        views.setViewVisibility(R.id.no_internet_connection, View.GONE);
-        views.setViewVisibility(R.id.widget_layout, View.VISIBLE);
-        return  views;
-    }
-
     private void updateWidget(Context context, PendingIntent pendingIntent, int appWidgetId){
         RemoteViews views = remoteViews(context, pendingIntent);
 
@@ -236,8 +255,12 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
                 !base_symbol_code.isEmpty() &&
                 symbol_code != null &&
                 !symbol_code.isEmpty();
-        if(isFinanceActive) { setupFinance(views, appWidgetId);}
-        else{ hideFinance(views, appWidgetId); }
+
+        if(isFinanceActive) {
+            setupFinance(views, appWidgetId);
+        } else{
+            hideFinance(views, appWidgetId);
+        }
 
         boolean isWeatherActive = countryName != null &&
                 !countryName.isEmpty() &&
@@ -246,24 +269,12 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
                 provinceName != null &&
                 !provinceName.isEmpty();
 
-        if(isWeatherActive){ setupWeather(views, appWidgetId);}
-        else{ hideWeather(views, appWidgetId); }
-
-    }
-    @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        for (int appWidgetId : appWidgetIds) {
-            this.appWidgetIds = appWidgetIds;
-            this.appWidgetManager = appWidgetManager;
-
-            Intent intent = new Intent(context, ExampleAppWidgetProvider.class);
-            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                    context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            updateWidget(context, pendingIntent, appWidgetId);
+        if(isWeatherActive){
+            setupWeather(views, appWidgetId);
+        } else{
+            hideWeather(views, appWidgetId);
         }
+
     }
 
 }
