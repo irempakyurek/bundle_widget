@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
@@ -27,6 +30,8 @@ public class AppWidgetConfigure extends Activity {
     String base_symbol_code = "TRY";
     String symbol_code = "USD";
 
+    private ProgressBar progressBar;
+    private ImageView BtnRefresh;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,12 +46,12 @@ public class AppWidgetConfigure extends Activity {
                     AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
         }
-        final Context context = AppWidgetConfigure.this;
+   /*     final Context context = AppWidgetConfigure.this;
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         RemoteViews views = new RemoteViews(context.getPackageName(),
                 R.layout.example_appwidget);
 
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+        appWidgetManager.updateAppWidget(appWidgetId, views);*/
         getFinanceDataService = RetrofitInstance.getFinanceClient().create(GetFinanceDataService.class);
         TextView usdPriceText = findViewById(R.id.usdPrice);
         ImageView usdLogo = findViewById(R.id.usdLogo);
@@ -71,6 +76,7 @@ public class AppWidgetConfigure extends Activity {
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         setResult(RESULT_OK, resultValue);
         finish();
+
     }
 
 

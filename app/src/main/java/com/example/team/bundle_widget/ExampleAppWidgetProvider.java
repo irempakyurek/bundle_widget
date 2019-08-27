@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RemoteViews;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,6 +35,7 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
     String provinceName = "Istanbul";
     AppWidgetManager appWidgetManager;
     int[] appWidgetIds;
+    ImageButton btnRefresh;
 
     //MARK: - Life Cycle Methods
     @Override
@@ -57,6 +59,7 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
                     context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             updateWidget(context, pendingIntent, appWidgetId);
+
         }
     }
 
@@ -126,9 +129,8 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
                     //showing date on the widget
                     views.setTextViewText(R.id.date, strNewDate);
 
-                    //  views.setViewVisibility(R.id.widget_layout, View.VISIBLE);
-                    // views.setViewVisibility(R.id.no_internet_connection, View.GONE);
-                    //for updating the widget
+                    stopProgressBar(views);
+
                     appWidgetManager.updateAppWidget(appWidgetId, views);
 
                 }
@@ -136,7 +138,7 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
             }
             @Override
             public void onFailure(Call<List<Finance>> call, Throwable t) {
-
+                stopProgressBar(views);
             }
         });
     }
@@ -223,6 +225,16 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
+    private void startProgressBar(RemoteViews views){
+        views.setViewVisibility(R.id.progressBar, View.VISIBLE);
+        views.setViewVisibility(R.id.container, View.INVISIBLE);
+    }
+
+    private void stopProgressBar(RemoteViews views){
+        views.setViewVisibility(R.id.progressBar, View.INVISIBLE);
+        views.setViewVisibility(R.id.container, View.VISIBLE);
+    }
+
     private void updateWidget(Context context, PendingIntent pendingIntent, int appWidgetId){
         RemoteViews views = remoteViews(context, pendingIntent);
 
@@ -230,6 +242,7 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
             views.setViewVisibility(R.id.widget_layout, View.GONE);
             views.setViewVisibility(R.id.no_internet_connection, View.VISIBLE);
             appWidgetManager.updateAppWidget(appWidgetId, views);
+            stopProgressBar(views);
             return;
         }
 
@@ -256,6 +269,7 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
         } else{
             hideWeather(views, appWidgetId);
         }
+
 
     }
 
