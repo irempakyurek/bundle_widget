@@ -35,7 +35,6 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
     String provinceName = "Istanbul";
     AppWidgetManager appWidgetManager;
     int[] appWidgetIds;
-    ImageButton btnRefresh;
 
     //MARK: - Life Cycle Methods
     @Override
@@ -146,6 +145,8 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
     private void hideFinance(RemoteViews views, int appWidgetId){
         views.setViewVisibility(R.id.finance_no_active_layout, View.VISIBLE);
         views.setViewVisibility(R.id.finance_active_layout, View.GONE);
+
+        stopProgressBar(views);
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
@@ -208,13 +209,15 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
 
                     views.setViewVisibility(R.id.widget_layout, View.VISIBLE);
                     views.setViewVisibility(R.id.no_internet_connection, View.GONE);
+
+                    stopProgressBar(views);
                     appWidgetManager.updateAppWidget(appWidgetId, views);
                 }
 
             }
             @Override
             public void onFailure(Call<Weather> callWeather, Throwable t) {
-
+                stopProgressBar(views);
             }
         });
     }
@@ -222,6 +225,8 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
     private void hideWeather(RemoteViews views, int appWidgetId){
         views.setViewVisibility(R.id.weather_no_active_layout, View.VISIBLE);
         views.setViewVisibility(R.id.weather_active_layout, View.GONE);
+
+        stopProgressBar(views);
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
@@ -241,8 +246,8 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
         if (!isNetworkConnected(context)){
             views.setViewVisibility(R.id.widget_layout, View.GONE);
             views.setViewVisibility(R.id.no_internet_connection, View.VISIBLE);
-            appWidgetManager.updateAppWidget(appWidgetId, views);
             stopProgressBar(views);
+            appWidgetManager.updateAppWidget(appWidgetId, views);
             return;
         }
 
